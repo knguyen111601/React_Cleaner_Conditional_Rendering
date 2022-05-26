@@ -1,70 +1,67 @@
-# Getting Started with Create React App
+# React - Cleaner Conditional Rendering
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Introduction
+Within React, one would typically manage what is rendered through the use of ternary operators:
+```
+    const [value, setValue] = useState(5)
 
-## Available Scripts
+    return (
+        <>
+        {value === 5
+            ? <h1>Value is 5!</h1>
+            : <h1>Value is not 5! </h1>
+        }
+        </h1>
+    )
 
-In the project directory, you can run:
+```
+This method of writing ternary operators directly into the JSX could lead to code that is very difficult to comprehend. Thus, creating a much more difficult codebase to work out of; especially on a team.
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## The Custom Component
+In this codebase, I've created a custom component called "RenderIf" that can be discovered within the "utils" folder under the src. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+This custom component accepts a "isTrue" argument as well as any children you decide you want to render. 
 
-### `npm test`
+The code for the component looks like this: 
+```
+export const RenderIf = ({children, isTrue}) => {
+    return isTrue ? children : null 
+}
+```
+The component is a basic ternary operator statement that will determine whether "isTrue" is true or false. If it is true, it will render its children. Otherwise, it won't render anything and return null 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## In Use
+We saw earlier that we are trying to render some JSX dependent on what our current state was. In our case, when the number was 5, it would render an h1 that states the value is 5. Otherwise it would render an h1 that says it is not.
 
-### `npm run build`
+Here is the custom "RenderIf" component in action.
+```
+  const [value, setValue] = useState(5)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+  return (
+    <>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    <i>Current Value: {value}</i>
 
-### `npm run eject`
+    <RenderIf isTrue={value === 5}> 
+      <h1>Value is 5! I will get rendered!</h1>
+      <button onClick={()=> setValue(5)}>Update</button>
+    </RenderIf>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    <RenderIf isTrue={value===3}> 
+      <h1>I will get rendered when value is 3!</h1>
+      <button onClick={()=> setValue(5)}>Update</button>
+    </RenderIf>
+    </>
+  );
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+For easier comprehension, "RenderIf" has isTrue in its prop that is set to a statement. One component has a statement for value === 5 and one has a statement for value === 3.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+As we saw previously, the isTrue statement is in a ternary operation that entails whether the children are returned or not. 
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+The "children" here are the items written within the &lt;RenderIf> &lt;/RenderIf> and are being rendered only is isTrue is true
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Conclusion
+As ternary operators are very commonly utilized in the management of rendered items on a page, the RenderIf component greatly improves readability and semantics in React.
